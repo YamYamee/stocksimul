@@ -12,6 +12,7 @@ typedef struct stock {
 	int number; //보유한 주식의 개수
 } Stock;
 
+arr_percent[4][4]; //전일 대비 증감을 보여주기 위해서 사용하는 배열
 
 Stock arr[4][4] =
 {
@@ -51,22 +52,23 @@ void purchase();
 //주식을 판매하는 함수
 void sell();
 //랜덤을 통해서 함수를 돌려서 주가 변동 - 한국의 기준에 맞춰서 상한가/하한가
-void change_stock_price(Stock arr[4][4]);
+void change_stock_price();
 //이벤트를 통해서 주식의 개수 유상증자/무상증자
 void change_stock_number(Stock arr[4][4]);
 //printf를 통해서 현재 나의 상황과 주식의 상황(모든 주식) 보여주는 함수
 void pre_sit();
-//각각의 종목의 가격이나 개수를 처음으로 설정하는 함수. 최초 1회만 실행 됨. 일단 배열로 구현하고 나중에 이 함수를 통해 매번 달라지게 끔 할게.
+//주식의 전일 대비 증감과 현재 가격을 보여주는 함수
+void show_stock();
 
 
-int main()
+
+int main(void)
 {
 	printf("%s %d %d \n", arr[0][0].name, arr[0][0].price, arr[0][0].number);
-	purchase();
-	printf("%d", total_property);
+
 }
 
-void change_stock_price(Stock arr[4][4]) // 주가를 변동 시키는 함수
+void change_stock_price() // 주가를 변동 시키는 함수
 {
 	double price_change;
 	for (int i = 0; i < 4; i++)
@@ -74,6 +76,7 @@ void change_stock_price(Stock arr[4][4]) // 주가를 변동 시키는 함수
 		for (int j = 0; j < 4; j++)
 		{
 			price_change = ((double)(100 + ((rand() % 30) - 15)) / 100);
+			arr_percent[i][j] = (price_change * 100) - 100;
 			arr[i][j].price = arr[i][j].price * price_change;
 		}
 	}
@@ -104,4 +107,43 @@ void purchase()
 		}
 	}
 	printf("요청하신 종목이 없습니다.");
+}
+
+void sell()
+{
+	char stockname[20];
+	int stocknumber;
+	printf("구매 할 주식 이름을 입력하세요: ");
+	gets(stockname);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (strcmp(stockname, arr[i][j].name) == 1)
+			{
+				printf("구매할 개수를 입력하세요");
+				scanf("%d", &stocknumber);
+				arr[i][j].number = stocknumber;
+				total_property += arr[i][j].price * arr[i][j].number;
+
+				printf("구매 후 남은 자산: %d \n", total_property);
+				printf("현재 보유 중이신 개수: %d \n", stocknumber);
+			}
+		}
+	}
+	printf("요청하신 종목이 없습니다.");
+}
+
+void show_stock()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+				printf("%s: 현재 주가: %d \n", arr[i][j].name, arr[i][j].price);
+				printf("%s: 전일 대비: %d\% \n\n", arr[i][j].name, arr_percent[i][j]);
+
+		}
+	}
 }
