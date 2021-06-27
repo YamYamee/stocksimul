@@ -42,6 +42,7 @@ Stock arr[4][4] =
 };
 
 //전역변수
+int total_property;
 int pre_property; //현재 자산 - 주식 + 현금
 int cash; //현금 자산만
 
@@ -61,7 +62,8 @@ void pre_sit();
 int main()
 {
 	printf("%s %d %d \n", arr[0][0].name, arr[0][0].price, arr[0][0].number);
-	change_stock_price(arr);
+	purchase();
+	printf("%d", total_property);
 }
 
 void change_stock_price(Stock arr[4][4]) // 주가를 변동 시키는 함수
@@ -76,4 +78,30 @@ void change_stock_price(Stock arr[4][4]) // 주가를 변동 시키는 함수
 		}
 	}
 	srand((unsigned int)time(NULL));
+}
+
+void purchase()
+{
+	char stockname[20];
+	int stocknumber;
+	printf("구매 할 주식 이름을 입력하세요: ");
+	gets(stockname);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (strcmp(stockname, arr[i][j].name) == 1)
+			{
+				printf("구매할 개수를 입력하세요");
+				scanf("%d", &stocknumber);
+				arr[i][j].number = stocknumber;
+				total_property -= arr[i][j].price * arr[i][j].number;
+
+				printf("구매 후 남은 자산: %d \n", total_property);
+				printf("현재 보유 중이신 개수: %d \n", stocknumber);
+			}
+		}
+	}
+	printf("요청하신 종목이 없습니다.");
 }
