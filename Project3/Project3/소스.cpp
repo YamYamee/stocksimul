@@ -102,16 +102,80 @@ void predict_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. 
 	srand((unsigned int)time(NULL));
 }
 
-void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
+void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 {
 	double price_change;
 	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 4; j++)
-		{
-			price_change = ((double)(100 + ((rand() % 30) - 15)) / 100);
-			arr_percent[i][j] = (price_change * 100) - 100;
-			arr[i][j].price = arr[i][j].price * price_change;
+		switch (i) {
+		case 0:
+			switch (pre[i]) {
+			case 0:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 + (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			case 1:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 - (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			}
+		case 1:
+			switch (pre[i]) {
+			case 0:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 + (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			case 1:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 - (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			}
+		case 2:
+			switch (pre[i]) {
+			case 0:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 + (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			case 1:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 - (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			}
+		case 3:
+			switch (pre[i]) {
+			case 0:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 + (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			case 1:
+				for (int j = 0; j < 4; j++)
+				{
+					price_change = ((double)(100 - (rand() % 30)) / 100);
+					arr_percent[i][j] = (price_change * 100) - 100;
+					arr[i][j].price = arr[i][j].price * price_change;
+				}
+			}
 		}
 	}
 	srand((unsigned int)time(NULL));
