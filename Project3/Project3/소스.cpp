@@ -72,6 +72,7 @@ void news();
 
 void predict_change_stock_price();
 void adjust_change_stock_price();
+void calculate();
 
 
 
@@ -83,7 +84,7 @@ void gotoxy(int x, int y) { //gotoxy함수 화면에 출력되는 문자의 위치를 바꾸는데 
 int main(void)
 {	
 	while (day <= 10) {
-		total_property = cash + stock_money;
+		calculate();
 		predict_change_stock_price();
 		while (!isDayOver) {
 			main_interface();
@@ -96,6 +97,17 @@ int main(void)
 		Sleep(2000);
 		cls;
 	}
+}
+
+void calculate() {
+	int temp = 0;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			temp += arr[i][j].price * arr[i][j].number;
+		}
+	}
+	stock_money = temp;
+	total_property = cash + stock_money;
 }
 
 void predict_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
@@ -112,93 +124,83 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 	srand((unsigned int)time(NULL));
 	for (int i = 0; i < 4; i++)
 	{
-		switch (i) {
+		switch (stock_change_prediction[i]) {
 		case 0:
-			switch (stock_change_prediction[i]) {
-			case 0:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_8 = rand() % 30;
-					price_change = ((100 - r_8) / 100.0);
-					arr_percent[i][j] = -r_8;
-					arr[0][j].price = arr[i][j].price * price_change;
-				} 
-				break;
-			case 1:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_9 = rand() % 30;
-					price_change = ((100 + r_9) / 100.0);
-					arr_percent[i][j] = r_9;
-					arr[0][j].price = arr[i][j].price * price_change;
-				}
-				break;
+			for (int j = 0; j < 4; j++)
+			{
+				int r_8 = rand() % 30;
+				price_change = ((100 - r_8) / 100.0);
+				arr_percent[i][j] = -r_8;
+				arr[0][j].price = arr[i][j].price * price_change;
+			} 
+			break;
+		case 1:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_9 = rand() % 30;
+				price_change = ((100 + r_9) / 100.0);
+				arr_percent[i][j] = r_9;
+				arr[0][j].price = arr[i][j].price * price_change;
+			}
+			break;
+		}
+		switch (stock_change_prediction[i]) {
+		case 0:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_0 = rand() % 30;
+				price_change = ((100 - r_0) / 100.0);
+				arr_percent[i][j] = -r_0;
+				arr[1][j].price = arr[i][j].price * price_change;
 			}
 			break;
 		case 1:
-			switch (stock_change_prediction[i]) {
-			case 0:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_0 = rand() % 30;
-					price_change = ((100 - r_0) / 100.0);
-					arr_percent[i][j] = -r_0;
-					arr[1][j].price = arr[i][j].price * price_change;
-				}
-				break;
-			case 1:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_1 = rand() % 30;
-					price_change = ((100 + r_1) / 100.0);
-					arr_percent[i][j] = r_1;
-					arr[1][j].price = arr[i][j].price * price_change;
-				}
-				break;
+			for (int j = 0; j < 4; j++)
+			{
+				int r_1 = rand() % 30;
+				price_change = ((100 + r_1) / 100.0);
+				arr_percent[i][j] = r_1;
+				arr[1][j].price = arr[i][j].price * price_change;
 			}
 			break;
-		case 2:
-			switch (stock_change_prediction[i]) {
-			case 0:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_2 = rand() % 30;
-					price_change = ((100 - r_2) / 100.0);
-					arr_percent[i][j] = -r_2;
-					arr[2][j].price = arr[i][j].price * price_change;
-				}
-				break;
-			case 1:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_3 = rand() % 30;
-					price_change = ((100 + r_3) / 100.0);
-					arr_percent[i][j] = r_3;
-					arr[2][j].price = arr[i][j].price * price_change;
-				}
-				break;
+		}
+		switch (stock_change_prediction[i]) {
+		case 0:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_2 = rand() % 30;
+				price_change = ((100 - r_2) / 100.0);
+				arr_percent[i][j] = -r_2;
+				arr[2][j].price = arr[i][j].price * price_change;
 			}
 			break;
-		case 3:
-			switch (stock_change_prediction[i]) {
-			case 0:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_4 = rand() % 30;
-					price_change = ((100 - r_4) / 100.0);
-					arr_percent[i][j] = -r_4;
-					arr[3][j].price = arr[i][j].price * price_change;
-				}
-				break;
-			case 1:
-				for (int j = 0; j < 4; j++)
-				{
-					int r_5 = rand() % 30;
-					price_change = ((100 + r_5) / 100.0);
-					arr_percent[i][j] = r_5;
-					arr[3][j].price = arr[i][j].price * price_change;
-				}
-				break;
+		case 1:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_3 = rand() % 30;
+				price_change = ((100 + r_3) / 100.0);
+				arr_percent[i][j] = r_3;
+				arr[2][j].price = arr[i][j].price * price_change;
+			}
+			break;
+		}
+		switch (stock_change_prediction[i]) {
+		case 0:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_4 = rand() % 30;
+				price_change = ((100 - r_4) / 100.0);
+				arr_percent[i][j] = -r_4;
+				arr[3][j].price = arr[i][j].price * price_change;
+			}
+			break;
+		case 1:
+			for (int j = 0; j < 4; j++)
+			{
+				int r_5 = rand() % 30;
+				price_change = ((100 + r_5) / 100.0);
+				arr_percent[i][j] = r_5;
+				arr[3][j].price = arr[i][j].price * price_change;
 			}
 			break;
 		}
