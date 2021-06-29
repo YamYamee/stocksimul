@@ -1,0 +1,6 @@
+﻿  소스.cpp
+C:\Users\babyy\source\repos\Project3\Project3\소스.cpp(77,18): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\babyy\source\repos\Project3\Project3\소스.cpp(77,22): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\babyy\source\repos\Project3\Project3\소스.cpp(94,45): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\babyy\source\repos\Project3\Project3\소스.cpp(95,38): warning C4244: '=': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Project3.vcxproj -> C:\Users\babyy\source\repos\Project3\Debug\Project3.exe
