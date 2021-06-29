@@ -15,7 +15,7 @@ typedef struct stock {
 	int number; //보유한 주식의 개수
 } Stock;
 
-double arr_percent[4][4]; //전일 대비 증감을 보여주기 위해서 사용하는 배열
+double arr_percent[4][4] = { 0 }; //전일 대비 증감을 보여주기 위해서 사용하는 배열
 int stock_change_prediction[4];
 
 Stock arr[4][4] =
@@ -49,7 +49,8 @@ Stock arr[4][4] =
 //전역변수
 int total_property = 500000;
 int initial_price = 500000;
-int cash; //현금 자산만
+int cash = 500000; //현금 자산만
+int stock_money = 0;
 int isTerminate = 0;
 int isDayOver = 0;
 
@@ -116,77 +117,89 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 + (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
-				}
+					int r_8 = rand() % 30;
+					price_change = ((100 - r_8) / 100.0);
+					arr_percent[i][j] = -r_8;
+					arr[0][j].price = arr[i][j].price * price_change;
+				} 
 				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 - (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_9 = rand() % 30;
+					price_change = ((100 + r_9) / 100.0);
+					arr_percent[i][j] = r_9;
+					arr[0][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			}
+			break;
 		case 1:
 			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 + (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_0 = rand() % 30;
+					price_change = ((100 - r_0) / 100.0);
+					arr_percent[i][j] = -r_0;
+					arr[1][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 - (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_1 = rand() % 30;
+					price_change = ((100 + r_1) / 100.0);
+					arr_percent[i][j] = r_1;
+					arr[1][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			}
+			break;
 		case 2:
 			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 + (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_2 = rand() % 30;
+					price_change = ((100 - r_2) / 100.0);
+					arr_percent[i][j] = -r_2;
+					arr[2][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 - (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_3 = rand() % 30;
+					price_change = ((100 + r_3) / 100.0);
+					arr_percent[i][j] = r_3;
+					arr[2][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			}
+			break;
 		case 3:
 			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 + (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_4 = rand() % 30;
+					price_change = ((100 - r_4) / 100.0);
+					arr_percent[i][j] = -r_4;
+					arr[3][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
-					price_change = ((double)(100 - (rand() % 30)) / 100);
-					arr_percent[i][j] = (price_change * 100) - 100;
-					arr[i][j].price = arr[i][j].price * price_change;
+					int r_5 = rand() % 30;
+					price_change = ((100 + r_5) / 100.0);
+					arr_percent[i][j] = r_5;
+					arr[3][j].price = arr[i][j].price * price_change;
 				}
 				break;
 			}
+			break;
 		}
 	}
 	srand((unsigned int)time(NULL));
@@ -202,10 +215,9 @@ void main_interface()
 	gotoxy(10, 8); printf("4. 뉴스 보기");
 	gotoxy(10, 9); printf("5. 다음날로 넘어가기");
 
-	gotoxy(20, 5); printf("보유 주식:");
-	gotoxy(20, 6); printf("현재 자산: %d원", total_property);
-	gotoxy(20, 7); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
-	gotoxy(20, 8); printf("%d일차", day);
+	gotoxy(20, 5); printf("현재 자산: %d원", total_property);
+	gotoxy(20, 6); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
+	gotoxy(20, 7); printf("%d일차", day);
 	gotoxy(0, 10);
 
 }
@@ -271,7 +283,8 @@ void purchase()
 					cls;
 					purchase();
 				}
-				total_property -= arr[i][j].price * arr[i][j].number;
+				cash -= arr[i][j].price * arr[i][j].number;
+				total_property = cash + stock_money;
 
 				Sleep(2000);
 				return;
@@ -308,7 +321,8 @@ void sell()
 					sell();
 				}
 				arr[i][j].number -= stocknumber;
-				total_property += arr[i][j].price * arr[i][j].number;
+				cash += arr[i][j].price * arr[i][j].number;
+				total_property = cash + stock_money;
 				return;
 			}
 		}
@@ -340,7 +354,7 @@ void show_stock()
 		for (int j = 0; j < 4; j++)
 		{
 			printf("%s: 현재 주가: %d      ", arr[i][j].name, arr[i][j].price);
-			printf("%s: 전일 대비: %d %% \n", arr[i][j].name, arr_percent[i][j]);
+			printf("%s: 전일 대비: %.2lf %% \n", arr[i][j].name, arr_percent[i][j]);
 		}
 	}
 	printf("\n");
