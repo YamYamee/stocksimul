@@ -131,7 +131,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_8 = rand() % 30;
 				price_change = ((100 - r_8) / 100.0);
 				arr_percent[i][j] = -r_8;
-				arr[0][j].price = arr[i][j].price * price_change;
+				arr[0][j].price = arr[0][j].price * price_change;
 			} 
 			break;
 		case 1:
@@ -140,7 +140,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_9 = rand() % 30;
 				price_change = ((100 + r_9) / 100.0);
 				arr_percent[i][j] = r_9;
-				arr[0][j].price = arr[i][j].price * price_change;
+				arr[0][j].price = arr[0][j].price * price_change;
 			}
 			break;
 		}
@@ -151,7 +151,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_0 = rand() % 30;
 				price_change = ((100 - r_0) / 100.0);
 				arr_percent[i][j] = -r_0;
-				arr[1][j].price = arr[i][j].price * price_change;
+				arr[1][j].price = arr[1][j].price * price_change;
 			}
 			break;
 		case 1:
@@ -160,7 +160,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_1 = rand() % 30;
 				price_change = ((100 + r_1) / 100.0);
 				arr_percent[i][j] = r_1;
-				arr[1][j].price = arr[i][j].price * price_change;
+				arr[1][j].price = arr[1][j].price * price_change;
 			}
 			break;
 		}
@@ -171,7 +171,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_2 = rand() % 30;
 				price_change = ((100 - r_2) / 100.0);
 				arr_percent[i][j] = -r_2;
-				arr[2][j].price = arr[i][j].price * price_change;
+				arr[2][j].price = arr[2][j].price * price_change;
 			}
 			break;
 		case 1:
@@ -180,7 +180,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_3 = rand() % 30;
 				price_change = ((100 + r_3) / 100.0);
 				arr_percent[i][j] = r_3;
-				arr[2][j].price = arr[i][j].price * price_change;
+				arr[2][j].price = arr[2][j].price * price_change;
 			}
 			break;
 		}
@@ -191,7 +191,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_4 = rand() % 30;
 				price_change = ((100 - r_4) / 100.0);
 				arr_percent[i][j] = -r_4;
-				arr[3][j].price = arr[i][j].price * price_change;
+				arr[3][j].price = arr[3][j].price * price_change;
 			}
 			break;
 		case 1:
@@ -200,7 +200,7 @@ void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 				int r_5 = rand() % 30;
 				price_change = ((100 + r_5) / 100.0);
 				arr_percent[i][j] = r_5;
-				arr[3][j].price = arr[i][j].price * price_change;
+				arr[3][j].price = arr[3][j].price * price_change;
 			}
 			break;
 		}
@@ -218,9 +218,10 @@ void main_interface()
 	gotoxy(10, 8); printf("4. 뉴스 보기");
 	gotoxy(10, 9); printf("5. 다음날로 넘어가기");
 
-	gotoxy(20, 5); printf("현재 자산: %d원", total_property);
-	gotoxy(20, 6); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
-	gotoxy(20, 7); printf("%d일차", day);
+	gotoxy(20, 5); printf("현재 현금: %d원", cash);
+	gotoxy(20, 6); printf("현재 자산: %d원", total_property);
+	gotoxy(20, 7); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
+	gotoxy(20, 8); printf("%d일차", day);
 	gotoxy(0, 10);
 
 }
@@ -278,7 +279,8 @@ void purchase()
 			{
 				printf("구매할 개수를 입력하세요 \n");
 				scanf("%d", &stocknumber);
-				arr[i][j].number = stocknumber;
+				int temp = stocknumber;
+				arr[i][j].number += stocknumber;
 				if (arr[i][j].price * arr[i][j].number > total_property)
 				{
 					printf("소유 자산보다 요청하신 값이 큽니다!");
@@ -286,8 +288,8 @@ void purchase()
 					cls;
 					purchase();
 				}
-				cash -= arr[i][j].price * arr[i][j].number;
-				stock_money += arr[i][j].price * arr[i][j].number;
+				cash -= arr[i][j].price * stocknumber;
+				stock_money += arr[i][j].price * stocknumber;
 				total_property = cash + stock_money;
 
 				Sleep(2000);
@@ -324,10 +326,11 @@ void sell()
 					cls;
 					sell();
 				}
-				arr[i][j].number -= stocknumber;
 				cash += arr[i][j].price * arr[i][j].number;
 				stock_money -= arr[i][j].price * arr[i][j].number;
+				arr[i][j].number -= stocknumber;
 				total_property = cash + stock_money;
+
 				return;
 			}
 		}
