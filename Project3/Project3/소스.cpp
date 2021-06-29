@@ -81,35 +81,38 @@ void gotoxy(int x, int y) { //gotoxy함수 화면에 출력되는 문자의 위치를 바꾸는데 
 
 int main(void)
 {	
-	while (day > 10) {
+	while (day <= 10) {
 		predict_change_stock_price();
 		while (!isDayOver) {
 			main_interface();
 			switch_interface();
 		}
 		adjust_change_stock_price();
+		isDayOver = 0;
 		day++;
+		gotoxy(0, 10); printf("다음날로 넘어갑니다");
+		Sleep(2000);
+		cls;
 	}
 }
 
 void predict_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 {
-	double price_change;
 	for (int i = 0; i < 4; i++)
 	{
-		stock_change_prediction[4] = rand() % 2;
+		stock_change_prediction[i] = rand() % 2;
 	}
-	srand((unsigned int)time(NULL));
 }
 
-void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
+void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 {
 	double price_change;
+	srand((unsigned int)time(NULL));
 	for (int i = 0; i < 4; i++)
 	{
 		switch (i) {
 		case 0:
-			switch (pre[i]) {
+			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
@@ -117,6 +120,7 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
@@ -124,9 +128,10 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			}
 		case 1:
-			switch (pre[i]) {
+			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
@@ -134,6 +139,7 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
@@ -141,9 +147,10 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			}
 		case 2:
-			switch (pre[i]) {
+			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
@@ -151,6 +158,7 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
@@ -158,9 +166,10 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			}
 		case 3:
-			switch (pre[i]) {
+			switch (stock_change_prediction[i]) {
 			case 0:
 				for (int j = 0; j < 4; j++)
 				{
@@ -168,6 +177,7 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			case 1:
 				for (int j = 0; j < 4; j++)
 				{
@@ -175,6 +185,7 @@ void adjust_change_stock_price(int *pre) // 주가를 변동 시키는 함수  1. 예정된 .
 					arr_percent[i][j] = (price_change * 100) - 100;
 					arr[i][j].price = arr[i][j].price * price_change;
 				}
+				break;
 			}
 		}
 	}
@@ -189,11 +200,13 @@ void main_interface()
 	gotoxy(10, 6); printf("2. 주식 매도");
 	gotoxy(10, 7); printf("3. 주가 확인");
 	gotoxy(10, 8); printf("4. 뉴스 보기");
+	gotoxy(10, 9); printf("5. 다음날로 넘어가기");
 
 	gotoxy(20, 5); printf("보유 주식:");
 	gotoxy(20, 6); printf("현재 자산: %d원", total_property);
 	gotoxy(20, 7); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
-	gotoxy(20, 8); printf("%d일차 \n", day);
+	gotoxy(20, 8); printf("%d일차", day);
+	gotoxy(0, 10);
 
 }
 
@@ -201,12 +214,6 @@ void switch_interface()
 {
 	int key = 0;
 	key = _getch();
-	if (key != 49 && key != 50 && key != 51 && key != 52) {
-		gotoxy(10, 9); printf("1,2,3,4 중 하나를 클릭해주십시오.");
-		Sleep(1000);
-		cls;
-		main_interface();
-	}
 	switch (key)
 	{
 	case 49:
@@ -223,7 +230,17 @@ void switch_interface()
 		break;
 	case 52:
 		cls;
-		//뉴스 만들어야함 - 이벤트
+		news();
+		break;
+	case 53:
+		cls;
+		isDayOver = 1;
+		break;
+	default:
+		gotoxy(10, 9); printf("1,2,3,4 중 하나를 클릭해주십시오.");
+		Sleep(1000);
+		cls;
+		main_interface();
 		break;
 	}
 
@@ -254,7 +271,7 @@ void purchase()
 					cls;
 					purchase();
 				}
-				total_property -= arr[i][j].price * arr[i][j].number;/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				total_property -= arr[i][j].price * arr[i][j].number;
 
 				Sleep(2000);
 				return;
@@ -264,7 +281,7 @@ void purchase()
 	printf("요청하신 종목이 없습니다. \n");
 	printf("메인 화면으로 돌아갑니다. \n");
 	Sleep(2000);
-	rewind(stdin);////////////////////////////////////////////////////////////////////////////////////
+	rewind(stdin);
 	return;
 }
 
@@ -327,6 +344,36 @@ void show_stock()
 		}
 	}
 	printf("\n");
+	printf("아무키나 누르면 메인 화면으로 돌아갑니다");
+	_getch();
+}
+
+void news() {
+	printf("뉴스속보 : \n");
+	if (stock_change_prediction[0] == 1) {
+		gotoxy(10, 1); printf("XX전자 미국에 태양광 발전 투자\n");
+	}
+	else {
+		gotoxy(10, 1); printf("XX전자 임원, 마약 혐의 기소\n");
+	}
+	if (stock_change_prediction[1] == 1) {
+		gotoxy(10, 2); printf("XX제약 신약 개발 성공\n");
+	}
+	else {
+		gotoxy(10, 2); printf("XX제약 공매도 대폭 줄고 주가 강보합... 상승제 언제?\n");
+	}
+	if (stock_change_prediction[2] == 1) {
+		gotoxy(10, 3); printf("코로나 백신 개발로 여행이 가능해져\n");
+	}
+	else {
+		gotoxy(10, 3); printf("코로나 직격타 입은 관광업계, 앞으로 2~3년 더 힘들듯\n");
+	}
+	if (stock_change_prediction[3] == 1) {
+		gotoxy(10, 4); printf("글로벌 소비회복, OEM주문 중국대신 한국으로 몰려\n");
+	}
+	else {
+		gotoxy(10, 4); printf("섬유 수출업계, 환율 급락에 패닉 상태\n");
+	}
 	printf("아무키나 누르면 메인 화면으로 돌아갑니다");
 	_getch();
 }
