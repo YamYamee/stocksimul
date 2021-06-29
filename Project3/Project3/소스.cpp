@@ -83,6 +83,7 @@ void gotoxy(int x, int y) { //gotoxy함수 화면에 출력되는 문자의 위치를 바꾸는데 
 int main(void)
 {	
 	while (day <= 10) {
+		total_property = cash + stock_money;
 		predict_change_stock_price();
 		while (!isDayOver) {
 			main_interface();
@@ -284,6 +285,7 @@ void purchase()
 					purchase();
 				}
 				cash -= arr[i][j].price * arr[i][j].number;
+				stock_money += arr[i][j].price * arr[i][j].number;
 				total_property = cash + stock_money;
 
 				Sleep(2000);
@@ -322,6 +324,7 @@ void sell()
 				}
 				arr[i][j].number -= stocknumber;
 				cash += arr[i][j].price * arr[i][j].number;
+				stock_money -= arr[i][j].price * arr[i][j].number;
 				total_property = cash + stock_money;
 				return;
 			}
