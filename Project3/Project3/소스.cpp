@@ -15,7 +15,8 @@ typedef struct stock {
 	int number; //보유한 주식의 개수
 } Stock;
 
-int arr_percent[4][4]; //전일 대비 증감을 보여주기 위해서 사용하는 배열
+double arr_percent[4][4]; //전일 대비 증감을 보여주기 위해서 사용하는 배열
+int stock_change_prediction[4];
 
 Stock arr[4][4] =
 {
@@ -49,28 +50,28 @@ Stock arr[4][4] =
 int total_property = 500000;
 int initial_price = 500000;
 int cash; //현금 자산만
+int isTerminate = 0;
+int isDayOver = 0;
 
 //언제 날짜가 초과되는지 정해야함
-int day = 0; //날짜 경과. 50일차에서 종료
+int day = 1; //날짜 경과. 10일차에서 종료
 
 //메인 인터페이스. 현재 날짜의 경과, 보유한 자산, 보유한 주식, 수익등을 보여주고 주식 매수 매도 주식 차트를 볼 수 있음
 void main_interface();
+//화면 전환을 담당하는 함수
+void switch_interface();
 //주식을 구매하는 함수
 void purchase();
 //주식을 판매하는 함수
 void sell();
-//랜덤을 통해서 함수를 돌려서 주가 변동 - 한국의 기준에 맞춰서 상한가/하한가
-void change_stock_price();
-//이벤트를 통해서 주식의 개수 유상증자/무상증자
-void change_stock_number(Stock arr[4][4]);
-//printf를 통해서 현재 나의 상황과 주식의 상황(모든 주식) 보여주는 함수
-void pre_sit();
 //주식의 전일 대비 증감과 현재 가격을 보여주는 함수
 void show_stock();
 //뉴스를 통해 랜덤 이벤트를 발생시키는 함수
 void news();
-//화면 전환을 담당하는 함수
-void switch_interface();
+
+void predict_change_stock_price();
+void adjust_change_stock_price();
+
 
 
 void gotoxy(int x, int y) { //gotoxy함수 화면에 출력되는 문자의 위치를 바꾸는데 사용됨
@@ -79,11 +80,29 @@ void gotoxy(int x, int y) { //gotoxy함수 화면에 출력되는 문자의 위치를 바꾸는데 
 }
 
 int main(void)
-{
-	main_interface();
+{	
+	while (day > 10) {
+		predict_change_stock_price();
+		while (!isDayOver) {
+			main_interface();
+			switch_interface();
+		}
+		adjust_change_stock_price();
+		day++;
+	}
 }
 
-void change_stock_price() // 주가를 변동 시키는 함수
+void predict_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
+{
+	double price_change;
+	for (int i = 0; i < 4; i++)
+	{
+		stock_change_prediction[4] = rand() % 2;
+	}
+	srand((unsigned int)time(NULL));
+}
+
+void adjust_change_stock_price() // 주가를 변동 시키는 함수  1. 예정된 .... 2. a
 {
 	double price_change;
 	for (int i = 0; i < 4; i++)
@@ -96,6 +115,22 @@ void change_stock_price() // 주가를 변동 시키는 함수
 		}
 	}
 	srand((unsigned int)time(NULL));
+}
+
+void main_interface()
+{
+	cls;
+
+	gotoxy(10, 5); printf("1. 주식 매수");
+	gotoxy(10, 6); printf("2. 주식 매도");
+	gotoxy(10, 7); printf("3. 주가 확인");
+	gotoxy(10, 8); printf("4. 뉴스 보기");
+
+	gotoxy(20, 5); printf("보유 주식:");
+	gotoxy(20, 6); printf("현재 자산: %d원", total_property);
+	gotoxy(20, 7); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
+	gotoxy(20, 8); printf("%d일차 \n", day);
+
 }
 
 void switch_interface()
@@ -155,19 +190,18 @@ void purchase()
 					cls;
 					purchase();
 				}
-				total_property -= arr[i][j].price * arr[i][j].number;
+				total_property -= arr[i][j].price * arr[i][j].number;/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 				Sleep(2000);
-				main_interface();
+				return;
 			}
 		}
 	}
 	printf("요청하신 종목이 없습니다. \n");
 	printf("메인 화면으로 돌아갑니다. \n");
 	Sleep(2000);
-	main_interface();
-
-	rewind(stdin);
+	rewind(stdin);////////////////////////////////////////////////////////////////////////////////////
+	return;
 }
 
 void sell()
@@ -185,20 +219,23 @@ void sell()
 			{
 				printf("판매할 개수를 입력하세요: ");
 				scanf("%d", &stocknumber);
-				arr[i][j].number = stocknumber;
+				if (stocknumber > arr[i][j].number)
+				{
+					printf("소유한 주식보다 요청하신 값이 큽니다!");
+					Sleep(2000);
+					cls;
+					sell();
+				}
+				arr[i][j].number -= stocknumber;
 				total_property += arr[i][j].price * arr[i][j].number;
-
-			}
-			else
-			{
-				printf("요청하신 종목이 없습니다. \n");
-				printf("메인 화면으로 돌아갑니다. \n");
-				Sleep(2000);
-				main_interface();
+				return;
 			}
 		}
 	}
-
+	printf("요청하신 종목이 없습니다. \n");
+	printf("메인 화면으로 돌아갑니다. \n");
+	Sleep(2000);
+	return;
 }
 
 void show_stock()
@@ -226,31 +263,6 @@ void show_stock()
 		}
 	}
 	printf("\n");
-	printf("메인 화면으로 돌아가고 싶다면 0을 클릭해주십시오. \n");
-	int key = _getch();
-	if (key == 48) {
-		cls;
-		main_interface();
-	}
-	else {
-		cls;
-		show_stock();
-	}
-}
-
-void main_interface()
-{
-	cls;
-
-	gotoxy(10, 5); printf("1. 주식 매수");
-	gotoxy(10, 6); printf("2. 주식 매도");
-	gotoxy(10, 7); printf("3. 주가 확인");
-	gotoxy(10, 8); printf("4. 뉴스 보기");
-
-	gotoxy(20, 5); printf("보유 주식:");
-	gotoxy(20, 6); printf("현재 자산: %d원", total_property);
-	gotoxy(20, 7); printf("수익률: %.2lf%%", (((double)(total_property - initial_price) / (initial_price) * 100)));
-	gotoxy(20, 8); printf("%d일차 \n", day);
-
-	switch_interface();
+	printf("아무키나 누르면 메인 화면으로 돌아갑니다");
+	_getch();
 }
